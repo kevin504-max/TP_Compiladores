@@ -393,8 +393,8 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parser.tab.h" // Inclua o header gerado pelo Bison
- 
+#include "muxtela.tab.h" // Inclusão do arquivo de cabeçalho gerado pelo Bison
+
 extern FILE *yyin;
 extern int quad_count;
 extern char* temp();
@@ -638,136 +638,136 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 14 "muxtela.l"
-{ return IF; }
+{ printf("Palavra chave 'if'\n"); return IF; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 15 "muxtela.l"
-{ return ELSE; }
+{ printf("Palavra chave 'else'\n"); return ELSE; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 16 "muxtela.l"
-{ return WHILE; }
+{ printf("Palavra chave 'while'\n"); return WHILE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 17 "muxtela.l"
-{ return DO; }
+{ printf("Palavra chave 'do'\n"); return DO; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 18 "muxtela.l"
-{ return FOR; }
+{ printf("Palavra chave 'for'\n"); return FOR; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 19 "muxtela.l"
-{ return INT; }
+{ printf("Palavra chave 'int'\n"); return INT; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 21 "muxtela.l"
-{ return MAIS; }
+#line 20 "muxtela.l"
+{ printf("Operador de adicao\n"); return ADICAO; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 22 "muxtela.l"
-{ return MENOS; }
+#line 21 "muxtela.l"
+{ printf("Operador de subtracao\n"); return SUBTRACAO; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 23 "muxtela.l"
-{ return VEZES; }
+#line 22 "muxtela.l"
+{ printf("Operador de multiplicacao\n"); return MULTIPLICACAO; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 24 "muxtela.l"
-{ return DIV; }
+#line 23 "muxtela.l"
+{ printf("Operador de divisao\n"); return DIVISAO; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 25 "muxtela.l"
-{ return MENOR; }
+#line 24 "muxtela.l"
+{ printf("Sinal de maior\n"); return MENOR; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 26 "muxtela.l"
-{ return MENORIGUAL; }
+#line 25 "muxtela.l"
+{ printf("Sinal de maior igual\n"); return MENORIGUAL; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 27 "muxtela.l"
-{ return MAIORIGUAL; }
+#line 26 "muxtela.l"
+{ printf("Sinal de menor igual\n"); return MAIORIGUAL; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 28 "muxtela.l"
-{ return MAIOR; }
+#line 27 "muxtela.l"
+{ printf("Sinal de menor\n"); return MAIOR; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 29 "muxtela.l"
-{ return IGUAL; }
+#line 28 "muxtela.l"
+{ printf("Sinal de igual\n"); return IGUAL; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 30 "muxtela.l"
-{ return DIFERENTE; }
+#line 29 "muxtela.l"
+{ printf("Sinal de diferenca\n"); return DIFERENCA; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 31 "muxtela.l"
-{ return NAO; }
+#line 30 "muxtela.l"
+{ printf("Sinal de negacao\n"); return NEGACAO; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 32 "muxtela.l"
-{ return LPAREN; }
+#line 31 "muxtela.l"
+{ printf("Parentese de abertura\n"); return LPAREN; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 33 "muxtela.l"
-{ return RPAREN; }
+#line 32 "muxtela.l"
+{ printf("Parentese de fechamento\n"); return RPAREN; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 34 "muxtela.l"
-{ return LBRACE; }
+#line 33 "muxtela.l"
+{ printf("Chave de abertura\n"); return LBRACE; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 35 "muxtela.l"
-{ return RBRACE; }
+#line 34 "muxtela.l"
+{ printf("Chave de fechamento\n"); return RBRACE; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 36 "muxtela.l"
-{ return PONTOEVIRGULA; }
+#line 35 "muxtela.l"
+{ printf("Ponto e virgula\n"); return PONTOEVIRGULA; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 38 "muxtela.l"
-{ yylval = atoi(yytext); return NUM; }
+#line 37 "muxtela.l"
+{ printf("Num");yylval = atoi(yytext); return NUM; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 39 "muxtela.l"
-{ yylval = strdup(yytext); return ID; }
+#line 38 "muxtela.l"
+{ printf("Var");yylval = strdup(yytext); return ID; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 41 "muxtela.l"
+#line 40 "muxtela.l"
 ; 
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 43 "muxtela.l"
+#line 42 "muxtela.l"
 { fprintf(stderr, "Caractere não reconhecido: %s\n", yytext); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 44 "muxtela.l"
+#line 43 "muxtela.l"
 ECHO;
 	YY_BREAK
 #line 774 "lex.yy.c"
@@ -1656,7 +1656,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 44 "muxtela.l"
+#line 43 "muxtela.l"
 
 
 int yywrap(){

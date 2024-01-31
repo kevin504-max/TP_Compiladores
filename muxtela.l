@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parser.tab.h" // Inclusão do arquivo de cabeçalho gerado pelo Bison
+#include "muxtela.tab.h" // Inclusão do arquivo de cabeçalho gerado pelo Bison
 
 extern FILE *yyin;
 extern int quad_count;
@@ -34,8 +34,8 @@ extern char* temp();
 "}"         { printf("Chave de fechamento\n"); return RBRACE; }
 ";"         { printf("Ponto e virgula\n"); return PONTOEVIRGULA; }
 
-[0-9]+      { yylval = atoi(yytext); return NUM; }
-[a-zA-Z][a-zA-Z0-9]* { yylval = strdup(yytext); return ID; }
+[0-9]+      { printf("Num\n");yylval = atoi(yytext); return NUM; }
+[a-zA-Z][a-zA-Z0-9]* { printf("Var\n");yylval = strdup(yytext); return ID; }
 
 [ \t\n]     ; 
 

@@ -78,12 +78,14 @@ extern FILE *yyin;
 extern int yylex();
 void yyerror(const char *s);
 
-char* next_temp(){
-    static int temp_count=0;
-    char*temp_name=(char*)malloc(8);
-    snprintf(temp_name,8,"_temp %d",temp_count);
-    temp_count++;
-    return temp_name;
+char* nextBuffer(){
+    static int countBuffer = 0;
+    char *nameBuffer = (char*)malloc(8);
+
+    snprintf(nameBuffer, 8, "_temp %d", countBuffer);
+    countBuffer++;
+    
+    return nameBuffer;
 }
 
 typedef struct {
@@ -97,7 +99,7 @@ typedef struct {
 
 
 /* Line 189 of yacc.c  */
-#line 101 "muxtela.tab.c"
+#line 103 "muxtela.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -131,21 +133,21 @@ typedef struct {
      WHILE = 262,
      DO = 263,
      FOR = 264,
-     MAIS = 265,
-     MENOS = 266,
-     VEZES = 267,
-     DIV = 268,
+     ADICAO = 265,
+     SUBTRACAO = 266,
+     MULTIPLICACAO = 267,
+     DIVISAO = 268,
      LPAREN = 269,
      RPAREN = 270,
      LBRACE = 271,
      RBRACE = 272,
      PONTOEVIRGULA = 273,
      NUM = 274,
-     NAO = 275,
+     NEGACAO = 275,
      E = 276,
      OU = 277,
      IGUAL = 278,
-     DIFERENTE = 279,
+     DIFERENCA = 279,
      MENOR = 280,
      MENORIGUAL = 281,
      MAIORIGUAL = 282,
@@ -167,7 +169,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 171 "muxtela.tab.c"
+#line 173 "muxtela.tab.c"
 
 #ifdef short
 # undef short
@@ -451,7 +453,7 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    41,    41
+       0,    43,    43
 };
 #endif
 
@@ -461,9 +463,10 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "INT", "ID", "IF", "ELSE", "WHILE", "DO",
-  "FOR", "MAIS", "MENOS", "VEZES", "DIV", "LPAREN", "RPAREN", "LBRACE",
-  "RBRACE", "PONTOEVIRGULA", "NUM", "NAO", "E", "OU", "IGUAL", "DIFERENTE",
-  "MENOR", "MENORIGUAL", "MAIORIGUAL", "MAIOR", "$accept", "inicializa", 0
+  "FOR", "ADICAO", "SUBTRACAO", "MULTIPLICACAO", "DIVISAO", "LPAREN",
+  "RPAREN", "LBRACE", "RBRACE", "PONTOEVIRGULA", "NUM", "NEGACAO", "E",
+  "OU", "IGUAL", "DIFERENCA", "MENOR", "MENORIGUAL", "MAIORIGUAL", "MAIOR",
+  "$accept", "inicializa", 0
 };
 #endif
 
@@ -1351,14 +1354,14 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 41 "muxtela.y"
+#line 43 "muxtela.y"
     {  (yyval) = (yyvsp[(1) - (2)]) ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1362 "muxtela.tab.c"
+#line 1365 "muxtela.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1570,7 +1573,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 155 "muxtela.y"
+#line 157 "muxtela.y"
 
 
 void yyerror(const char *s) {
@@ -1579,7 +1582,17 @@ void yyerror(const char *s) {
 
 int main(int argc, char *argv[]) {
 
-    FILE *input_file = fopen("./teste1.txt", "r");
+    FILE *input_file = fopen("teste1.txt", "r");
+
+      if (!input_file) {
+        system("PAUSE");
+        perror("Erro ao abrir o arquivo");
+        return 1;
+    }
+
+    yyin = input_file;
+
+    yyparse(); 
 
     puts(input_file);
 

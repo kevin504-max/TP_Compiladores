@@ -162,7 +162,17 @@ void yyerror(const char *s) {
 
 int main(int argc, char *argv[]) {
 
-    FILE *input_file = fopen("./teste1.txt", "r");
+    FILE *input_file = fopen("teste1.txt", "r");
+
+      if (!input_file) {
+        system("PAUSE");
+        perror("Erro ao abrir o arquivo");
+        return 1;
+    }
+
+    yyin = input_file;
+
+    yyparse(); 
 
     puts(input_file);
 
