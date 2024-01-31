@@ -7,12 +7,14 @@ extern FILE *yyin;
 extern int yylex();
 void yyerror(const char *s);
 
-char* next_temp(){
-    static int temp_count=0;
-    char*temp_name=(char*)malloc(8);
-    snprintf(temp_name,8,"_temp %d",temp_count);
-    temp_count++;
-    return temp_name;
+char* nextBuffer(){
+    static int countBuffer = 0;
+    char *nameBuffer = (char*)malloc(8);
+
+    snprintf(nameBuffer, 8, "_temp %d", countBuffer);
+    countBuffer++;
+    
+    return nameBuffer;
 }
 
 typedef struct {
@@ -25,118 +27,118 @@ typedef struct {
 
 %}
 
-// Definições dos tokens
+// Definindo os tokens do analisador léxico
 %token INT ID IF ELSE WHILE DO FOR
-%token MAIS MENOS VEZES DIV LPAREN RPAREN LBRACE RBRACE PONTOEVIRGULA
-%token NUM NAO E OU IGUAL DIFERENTE MENOR MENORIGUAL MAIORIGUAL MAIOR
+%token ADICAO SUBTRACAO MULTIPLICACAO DIVISAO LPAREN RPAREN LBRACE RBRACE PONTOEVIRGULA
+%token NUM NEGACAO E OU IGUAL DIFERENCA MENOR MENORIGUAL MAIORIGUAL MAIOR
 
-// Definição das associações
-%left MAIS MENOS
-%left VEZES DIV
+// Definindo os tipos de dados
+%left ADICAO SUBTRACAO
+%left MULTIPLICACAO DIVISAO
 %right IGUAL
 
 %%
 
-// Regra para inicialização de variáveis
+// Regras para declarações de variáveis
 inicializa: INT ID {  $$ = $1 };
 
-// Regras para expressões matemáticas
+// Regras para expressões aritméticas
 expressao:
     LPAREN expressao RPAREN
-    | inicializa IGUAL expressao // atribuição
+    | inicializa IGUAL expressao
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('=', $1.str, $3.str, $$);
     }
-    | ID IGUAL expressao // Expressão de adição
+    | ID IGUAL expressao // Expressão de atribuição
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('=', $1.str, $3.str, $$);
     }
-    | termo MAIS expressao // Expressão de adição
+    | termo ADICAO expressao // Expressão de adição
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('+', $1.str, $3.str, $$);
     }
-    | termo MENOS expressao // Expressão de adição
+    | termo SUBTRACAO expressao // Expressão de subtração
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('-', $1.str, $3.str, $$);
     }
     ;
 
 termo: 
-    fator // Termo em parênteses
-    | fator VEZES termo // Termo multiplicado por fator
+    fator // Fator simples (número ou variável)
+    | fator MULTIPLICACAO termo // Expressão de multiplicação entre fatores
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('*', $1.str, $3.str, $$);
     }
-    | fator DIV termo // Termo dividido por fator
+    | fator DIVISAO termo // Expressão de divisão entre fatores
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('/', $1.str, $3.str, $$);
     }
     ;
 
 fator: 
-    NUM // Número
+    NUM // Número inteiro (constante)
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('=', $1.num, '_', $$);
     }
-    | ID // Identificador (variável)
+    | ID // Variável (identificador)
     {
         $$ = $1.str;
     }
     ;
 
-// Regras para operações de comparação e lógica
+// Regras para expressões lógicas
 comparacao: 
     expressao // Comparação simples
     | comparacao E comparacao // Expressão lógica AND
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('&&', $1.str, $3.str, $$);
     }
     | comparacao OU comparacao // Expressão lógica OR
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('||', $1.str, $3.str, $$);
     }
-    | NAO LPAREN comparacao RPAREN // Expressão lógica NOT
+    | NEGACAO LPAREN comparacao RPAREN // Expressão lógica NOT
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('!', $3.str, '_', $$);
     }
     | comparacao IGUAL comparacao // Expressão de igualdade
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('==', $1.str, $3.str, $$);
     }
-    | comparacao DIFERENTE comparacao // Expressão de diferença
+    | comparacao DIFERENCA comparacao // Expressão de diferença
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('!=', $1.str, $3.str, $$);
     }
-    | comparacao MENOR comparacao // Expressão de menor que
+    | comparacao MENOR comparacao // Expressão de menor
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('<', $1.str, $3.str, $$);
     }
     | comparacao MENORIGUAL comparacao // Expressão de menor ou igual
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('<=', $1.str, $3.str, $$);
     }
-    | comparacao MAIOR comparacao // Expressão de maior que
+    | comparacao MAIOR comparacao // Expressão de maior
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('>', $1.str, $3.str, $$);
     }
     | comparacao MAIORIGUAL comparacao // Expressão de maior ou igual
     {
-        $$ = next_temp();
+        $$ = nextBuffer();
         gerar('>=', $1.str, $3.str, $$);
     }
     ;
@@ -147,7 +149,7 @@ declaracao:
     | expressao PONTOEVIRGULA declaracao // Declaração de expressão simples seguida de ponto e vírgula
     | IF LPAREN comparacao RPAREN LBRACE declaracao RBRACE // Declaração IF
     | IF LPAREN comparacao RPAREN LBRACE declaracao RBRACE ELSE LBRACE declaracao RBRACE // Declaração IF-ELSE
-    | WHILE LPAREN comparacao RPAREN LBRACE declaracao RBRACE // Declaração WHILE
+    | WHILE LPAREN comparacao RPAREN LBRACE declaracao RBRACE // Loop WHILE
     | DO LBRACE declaracao RBRACE WHILE LPAREN comparacao RPAREN PONTOEVIRGULA // Loop DO-WHILE
     | FOR LPAREN expressao PONTOEVIRGULA comparacao PONTOEVIRGULA expressao RPAREN LBRACE declaracao RBRACE // Loop FOR
     ;
